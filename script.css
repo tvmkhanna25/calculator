@@ -1,0 +1,174 @@
+// --- Converted Python Code ---
+
+// 1. Statistics Median
+// Python: A=statistics.median([10, 20, 10, 30, 10, 20, 30])
+function calculateMedian(values) {
+    if (values.length === 0) return 0;
+    values.sort((a, b) => a - b);
+    const half = Math.floor(values.length / 2);
+    if (values.length % 2) return values[half];
+    return (values[half - 1] + values[half]) / 2.0;
+}
+let A = calculateMedian([10, 20, 10, 30, 10, 20, 30]);
+console.log("Median:", A);
+
+
+// 2. List Access
+// Python: L = ["India", "Incredible", "Bharat"]; print(L[1][0] + L[2][-1])
+let L = ["India", "Incredible", "Bharat"];
+// JS doesn't support negative indexing directly like [-1], so we use .at(-1) or length-1
+console.log("String concat:", L[1][0] + L[2].slice(-1)); 
+
+
+// 3. Boolean Logic
+// Python: print(19<11 and 29>19 or not 75>30)
+// JS: and -> &&, or -> ||, not -> !
+console.log("Boolean Logic:", 19 < 11 && 29 > 19 || !(75 > 30));
+
+
+// 4. String Slicing
+// Python: str= "Soft Skills"; print(str[-3::-3])
+// Python slice [start:stop:step]. -3 start, end (omitted), step -3 (reverse)
+// "Soft Skills" -> indices: 01234567890
+// -3 is 'l' (index 8). 
+// Stepping back by 3: 8('l') -> 5('S') -> 2('f') -> stop
+let strVal = "Soft Skills";
+// JS doesn't have a direct step slice. We can simulate it.
+// Python [-3::-3] starts at index 8 ('l'), goes backwards by 3.
+// 'l' (8), 'S' (5), 'f' (2). Result "lSf"
+function pythonSlice(str, start, stop, step) {
+    let result = "";
+    let len = str.length;
+    // Handle negative start
+    let i = start < 0 ? len + start : start;
+    
+    // Simple loop for this specific case (negative step)
+    if (step < 0) {
+        while (i >= 0 && (stop === undefined || i > stop)) {
+            result += str[i];
+            i += step;
+        }
+    }
+    return result;
+}
+console.log("String Slice:", pythonSlice(strVal, -3, undefined, -3));
+
+
+// 5. Arithmetic
+// Python: print(10-3**2**2+144/12)
+// Python ** is right-associative: 2**2 = 4, then 3**4 = 81.
+// 10 - 81 + 12 = -59
+console.log("Arithmetic:", 10 - Math.pow(3, Math.pow(2, 2)) + 144 / 12);
+
+
+// 6. Try/Catch
+// Python: try: x = 10 / 0 ...
+try {
+    let x = 10 / 0; // JS returns Infinity, doesn't throw. We must check manually if we want to emulate Python
+    if (!isFinite(x)) throw new Error("Division by zero error!");
+} catch (e) {
+    if (e.message.includes("Division by zero")) {
+        console.log("Division by zero error!");
+    } else {
+        console.log("Some other error!");
+    }
+}
+
+
+// 7. Dictionary
+// Python: my_dict = {"name": "Alicia", ...}; print(my_dict.get("profession", "Not Specified"))
+let myDict = { "name": "Alicia", "age": 27, "city": "DELHI" };
+console.log("Dict Get:", myDict["profession"] !== undefined ? myDict["profession"] : "Not Specified");
+
+
+// 8. Random Loop
+// Python: Lower=random.randint(2,2); Upper=random.randint(2,3); for K in range...
+let Lower = 2; // randint(2,2) is always 2
+let Upper = Math.floor(Math.random() * (3 - 2 + 1)) + 2; // randint(2,3) -> 2 or 3
+let output = "";
+for (let K = Lower; K <= Upper; K++) {
+    output += [10, 30, 50, 70][K] + "@"; // Note: Python code used o[K] where o=[10,30,50,70]. K is 2 or 3.
+}
+console.log("Random Loop:", output);
+
+
+// 9. Global Variable Function
+// Python: j=5; def add(): global j; j=j+7...
+let j = 5;
+console.log(j + "@@"); 
+function add() {
+    j = j + 7;
+    console.log(j + "##");
+}
+console.log("Global Var (Before):", j);
+add();
+console.log("Global Var (After):", j);
+
+
+// 10. String Split/Partition
+// Python: st='Waterskiing is thrilling!'; print(st.split("i"))
+let st = 'Waterskiing is thrilling!';
+console.log("Split:", st.split("i"));
+
+// Python: text="Learn Python with fun and practice"; print(text.partition("with"))
+// JS doesn't have partition. It returns [before, sep, after]
+let text = "Learn Python with fun and practice";
+let sep = "with";
+let idx = text.indexOf(sep);
+let partition = idx === -1 ? [text, "", ""] : [text.substring(0, idx), sep, text.substring(idx + sep.length)];
+console.log("Partition:", partition);
+console.log("Count 'a':", (text.match(/a/g) || []).length);
+
+
+// 11. Dictionary Loop
+// Python: emp = {...}; for name in emp: ...
+let emp = { "Arv": [85000, 90000], "Ria": [78000, 88000], "Jay": [72000, 80000], "Tia": [80000, 70000] };
+let selected = [];
+for (let name in emp) {
+    let salary = emp[name];
+    let average = (salary[0] + salary[1]) / 2;
+    if (average > 80000) {
+        selected.push(name);
+    }
+}
+console.log("Selected Employees:", selected);
+
+
+// --- Calculator App Logic ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    const display = document.getElementById('calc-display');
+    const buttons = document.querySelectorAll('.btn');
+    
+    if (!display) return; // Guard clause if UI isn't present
+
+    let currentInput = "";
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const value = button.getAttribute('data-value');
+            
+            if (value === 'C') {
+                currentInput = "";
+                display.value = "";
+            } else if (value === '=') {
+                try {
+                    // Safety: In a real app, avoid eval. For this demo, we'll use a safer Function constructor or simple eval
+                    // Replacing 'x' with '*' for JS evaluation if visual used 'x'
+                    let expression = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+                    currentInput = eval(expression).toString();
+                    display.value = currentInput;
+                } catch (error) {
+                    display.value = "Error";
+                    currentInput = "";
+                }
+            } else if (value === 'back') {
+                currentInput = currentInput.slice(0, -1);
+                display.value = currentInput;
+            } else {
+                currentInput += value;
+                display.value = currentInput;
+            }
+        });
+    });
+});
